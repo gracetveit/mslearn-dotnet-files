@@ -31,7 +31,8 @@ namespace files_module
       foreach (var file in foundFiles)
       {
         // The file name will contain the full path, so only check the end of it
-        if (file.EndsWith("sales.json"))
+        var extension = Path.GetExtension(file);
+        if (extension == ".json")
         {
           salesFiles.Add(file);
         }
