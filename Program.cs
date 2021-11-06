@@ -10,12 +10,13 @@ namespace files_module
     {
       var currentDirectory = Directory.GetCurrentDirectory();
       var storesDirectory = Path.Combine(currentDirectory, "stores");
+      var salesTotalsDir = Path.Combine(currentDirectory, "salesTotalDir");
+
+      Directory.CreateDirectory(salesTotalsDir);
+
       var salesFiles = FindFiles(storesDirectory);
 
-      foreach (var file in salesFiles)
-      {
-        Console.WriteLine(file);
-      }
+      File.WriteAllText(Path.Combine(salesTotalsDir, "totals.txt"), "");
     }
 
     static IEnumerable<string> FindFiles(string folderName)

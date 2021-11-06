@@ -351,3 +351,6 @@ MigrationBackup/
 
 # VSCode settings
 .vscode/
+
+# Generate files
+salesTotalDir
