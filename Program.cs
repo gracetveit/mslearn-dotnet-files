@@ -1,22 +1,15 @@
 ﻿using System;
 using System.IO;
 using System.Collections.Generic;
+using Newtonsoft.Json;
 
 namespace files_module
 {
   class Program
   {
-    static void Main(string[] args)
+    class SalesData
     {
-      var currentDirectory = Directory.GetCurrentDirectory();
-      var storesDirectory = Path.Combine(currentDirectory, "stores");
-      var salesTotalsDir = Path.Combine(currentDirectory, "salesTotalDir");
-
-      Directory.CreateDirectory(salesTotalsDir);
-
-      var salesFiles = FindFiles(storesDirectory);
-
-      File.WriteAllText(Path.Combine(salesTotalsDir, "totals.txt"), "");
+      public double Total { get; set; }
     }
 
     static IEnumerable<string> FindFiles(string folderName)
@@ -40,6 +33,41 @@ namespace files_module
       }
 
       return salesFiles;
+    }
+
+    static double CalculateSalesTotal(IEnumerable<string> salesFiles)
+    {
+      double salesTotal = 0;
+
+      // Loop over each file path in salesFiles
+      foreach (var file in salesFiles)
+      {
+        // Read the contents of the file
+        string salesJson = File.ReadAllText(file);
+
+        // Parse the contents as JSON
+        SalesData data = JsonConvert.DeserializeObject<SalesData>(salesJson);
+
+        // Add the amount found in the Total field to the salesTotal variable
+        salesTotal += data.Total;
+      }
+
+      return salesTotal;
+    }
+
+    static void Main(string[] args)
+    {
+      var currentDirectory = Directory.GetCurrentDirectory();
+      var storesDirectory = Path.Combine(currentDirectory, "stores");
+      var salesTotalsDir = Path.Combine(currentDirectory, "salesTotalDir");
+
+      Directory.CreateDirectory(salesTotalsDir);
+
+      var salesFiles = FindFiles(storesDirectory);
+
+      var salesTotal = CalculateSalesTotal(salesFiles);
+
+      File.WriteAllText(Path.Combine(salesTotalsDir, "totals.txt"), $"{salesTotal}{Environment.NewLine}");
     }
   }
 }
