@@ -8,7 +8,9 @@ namespace files_module
   {
     static void Main(string[] args)
     {
-      var salesFiles = FindFiles("stores");
+      var currentDirectory = Directory.GetCurrentDirectory();
+      var storesDirectory = Path.Combine(currentDirectory, "stores");
+      var salesFiles = FindFiles(storesDirectory);
 
       foreach (var file in salesFiles)
       {
